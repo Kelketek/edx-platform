@@ -186,6 +186,18 @@ define(["jquery", "underscore", "gettext", "js/views/baseview", "js/views/utils/
                 });
             },
 
+            getXBlockType: function(category, parentInfo, translate) {
+                var xblockType = category;
+                if (category === 'chapter') {
+                    xblockType = translate ? gettext('section') : 'section';
+                } else if (category === 'sequential') {
+                    xblockType = translate ? gettext('subsection') : 'subsection';
+                } else if (category === 'vertical' && (!parentInfo || parentInfo.isSequential())) {
+                    xblockType = translate ? gettext('unit') : 'unit';
+                }
+                return xblockType;
+            },
+
             onSync: function(event) {
                 if (ViewUtils.hasChangedAttributes(this.model, ['visibility_state', 'child_info', 'display_name'])) {
                    this.onXBlockChange();
