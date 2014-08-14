@@ -19,9 +19,13 @@
   * "What's devstack?" ... See [here](https://github.com/edx/configuration/wiki/edX-Developer-Stack)
 
 ###### Check the 'flaky test' list
-  * A list of known flaky tests can be found [here](https://openedx.atlassian.net/issues/?filter=10600).
+  * Known flaky tests can be found with filters on the openedx Jira site
+    - [Known unresolved flaky tests](https://openedx.atlassian.net/issues/?filter=10600)
+    - [Recently resolved flaky tests](https://openedx.atlassian.net/issues/?filter=11001)
   * Remember that a test being listed as flaky doesn't mean that it can't fail for other reasons. Look into
     the logs and confirm that it is failing for the same reason as listed in the issue ticket.
+  * If your build has failure that is a recently resolved flaky test, try rebasing from master. (A new auto-pr
+    build will start when you do this on an open PR.)
 
 ###### Check if the failure is occurring on the master branch
   * Tests run for the master branch are [here](https://jenkins.testeng.edx.org/job/edx-all-tests-auto-master/).
