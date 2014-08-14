@@ -102,20 +102,11 @@ def ruby_prereqs_installation():
 
 def node_prereqs_installation():
     """
-    Installs Node prerequisites
+    Configures npm and installs Node prerequisites
     """
-    try:
-        sh("npm config set registry {}".format(NPM_REGISTRY))
-    # Ignoring a chown failure related to updating the npm registry
-    # when the executing user is not root, but node was originally
-    # installed by root.
-    # See https://github.com/npm/npm/issues/3565
-    except BuildFailure as e:
-        if "Subprocess return code: 50" in e.message:
-            print("Npm registry error. Ignoring.")
-            pass
-        else:
-            raise
+    sh("test `npm config get registry` = \"{reg}\" || "
+       "(echo setting registry; npm config set registry"
+       " {reg})".format(reg=NPM_REGISTRY))
     sh('npm install')
 
 
