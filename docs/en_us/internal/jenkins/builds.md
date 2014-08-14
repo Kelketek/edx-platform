@@ -2,6 +2,9 @@
 There are three ways that builds start in our jenkins testing infastructure for edx-platform.  
 
 ##### 1) Automatic builds for Pull Requests
+* Permissions Required: You must either be a _public_ member of the [edx organization on github](https://github.com/orgs/edx/people),
+  or on a whitelist.
+
 * How it gets started  
   
   >* When you submit a pull request to the edx-platform repository, a jenkins build will
@@ -9,9 +12,7 @@ There are three ways that builds start in our jenkins testing infastructure for 
   >* When you add a new commit to the PR, a new build will be run for those changes.
   >* Sometimes it may take a little while for the build to start. That ussually just means that 
   >  jenkins is pretty busy.
-  >* NOTE:  You must have the correct permissions on your github account for this to work. (i.e. Be
-  >  a member of the edx organization on github or on a whitelist.)
-  
+
 * How it is reported  
   
   >* You will know a build is started if you see this:  
@@ -27,10 +28,14 @@ There are three ways that builds start in our jenkins testing infastructure for 
   >* You can click on 'details' to take you to the jenkins build report.
     
 ##### 2) Manually started builds for pull requests
+
+* Permissions Required: You must be a _public_ member of the [edx organization on github](https://github.com/orgs/edx/people).
+
 * How it gets started  
-  
+
   >1. Go to [edx-all-tests-manual-pr](https://jenkins.testeng.edx.org/job/edx-all-tests-manual-pr/)
-  >2. Make sure you are __logged in__.
+  >2. Make sure you are __logged in__. If you are already logged in, your username and a 'log out' link will be in the
+  >   upper right corner of the page. Else, the 'log in' link will be there.
   >3. Click 'Build with Parameters' in the left navigation column.
   >
   >  ![Build with Params](jenkins_images/build_w_params.png)
@@ -46,10 +51,14 @@ There are three ways that builds start in our jenkins testing infastructure for 
   >  results as well. 
   
 ##### 3) Manually started builds for commits
+
+* Permissions Required: You must be a _public_ member of the [edx organization on github](https://github.com/orgs/edx/people).
+
 * How it gets started
   
   >1. Go to [edx-all-tests-manual-commit](https://jenkins.testeng.edx.org/job/edx-all-tests-manual-commit/)
-  >2. Make sure you are __logged in__.
+  >2. Make sure you are __logged in__. If you are already logged in, your username and a 'log out' link will be in the
+  >   upper right corner of the page. Else, the 'log in' link will be there.
   >3. Click 'Build with Parameters' in the left navigation column.
   >4. Enter the commit hash that you want to test.
   >5. Click on 'Build'.
