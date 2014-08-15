@@ -2,15 +2,16 @@
 There are three ways that builds start in our jenkins testing infastructure for edx-platform.  
 
 ##### 1) Automatic builds for Pull Requests
-* Permissions Required: You must either be a _public_ member of the [edx organization on github](https://github.com/orgs/edx/people),
-  or on a whitelist.
+* Permissions Required: You must be a _public_ member of the [edx organization on github](https://github.com/orgs/edx/people).
+  If you are not, someone will start a build for you during the pull request review process. You will still be able to
+  view the build results as described below.
 
 * How it gets started  
   
   >* When you submit a pull request to the edx-platform repository, a jenkins build will
   >  automatically start and run unit and acceptance tests at the most recent commit.
   >* When you add a new commit to the PR, a new build will be run for those changes.
-  >* Sometimes it may take a little while for the build to start. That ussually just means that 
+  >* Sometimes it may take a little while for the build to start. That usually just means that
   >  jenkins is pretty busy.
 
 * How it is reported  

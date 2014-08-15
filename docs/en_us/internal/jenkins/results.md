@@ -113,7 +113,8 @@ Note that a passing build does __not__ mean that you have not introduced new pep
 
 ###### Console output for the shard
 
-Sometimes a worker will have an error during setup for the tests. If this happens, you will see a red dot for the shard, but no
+Examining the console output of a build can provide more information about the test results. For example,
+sometimes a worker will have an error during setup for the tests. If this happens, you will see a red dot for the shard, but no
 test failures reported (since the tests did not run).  In this case, checking the console log can be helful to determine the
 reason for the build failure. It can sometimes be useful to review even if you can find the individual error message for a test.
 
