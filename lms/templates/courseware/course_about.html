@@ -211,7 +211,7 @@
           <a class="instructor-info-action" href="${studio_url}">${_("View About Page in studio")}</a>
         </div>
       % endif
-      
+
       <nav>
         <a href="#" class="active">${_("Overview")}</a>
       ##  <a href="#">${_("FAQ")}</a>
@@ -346,7 +346,7 @@
 ## which is when the student is not registered.
 %if active_reg_button or is_shib_course:
   <div style="display: none;">
-    <form id="class_enroll_form" method="post" data-remote="true" action="${reverse('change_enrollment')}">
+    <form id="class_enroll_form" method="post" data-remote="true" action="${reverse('change_enrollment_autoreg')}">
       <fieldset class="enroll_fieldset">
         <input name="course_id" type="hidden" value="${course.id.to_deprecated_string()}">
         <input name="enrollment_action" type="hidden" value="enroll">
