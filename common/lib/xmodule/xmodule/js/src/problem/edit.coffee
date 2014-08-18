@@ -224,7 +224,7 @@ class @MarkdownEditingDescriptor extends XModule.Descriptor
       @customLabel = ' label="' + tokens[0] + '"'    # save the custom label for insertion into the XML
       returnString = tokens[1]
     else
-      @customLabel = ' '
+      @customLabel = ''
     return returnString                               # return the feedback string but without the custom label, if any
 
   #________________________________________________________________________________
@@ -356,7 +356,7 @@ class @MarkdownEditingDescriptor extends XModule.Descriptor
             returnXmlString += '\n'
             returnXmlString += '               <optionhint ' + @customLabel + '>' + hintText + '\n'
             returnXmlString += '               </optionhint>\n'
-          returnXmlString += '          </option>\n'
+          returnXmlString += '</option>\n'
 
           delimiter = ','
 
@@ -613,7 +613,7 @@ class @MarkdownEditingDescriptor extends XModule.Descriptor
             choices += '    <choice correct="' + correct + '"' + fixed + '>' + value;
             if(hintText) {
               choices += '\n';
-              choices += '        <choicehint ' + MarkdownEditingDescriptor.customLabel + '>' + hintText + '\n';
+              choices += '        <choicehint' + MarkdownEditingDescriptor.customLabel + '>' + hintText + '\n';
               choices += '        </choicehint>\n    ';
             }
             choices += '</choice>\n';
@@ -739,3 +739,4 @@ class @MarkdownEditingDescriptor extends XModule.Descriptor
     }`
     return toXml markdown
 
+ 
