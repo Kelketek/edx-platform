@@ -142,7 +142,7 @@ You can create a group configurations at any time.
   * Click **Add another group** to include another group as part of the
     configuration.
   * Click the **X** to the right of an existing group to remove it from the
-    configuration.
+    configuration. A group configuration must have at least one group.
 
 5. Click **Create** to save the new group configuration.
    
@@ -176,10 +176,11 @@ You can change the group configuration name at any time.
     :alt: Edit a Group Configuration page
 
 #. Modify the name and description as needed.
+
 #. Modify groups in the configuration as needed. See `Create a Group
    Configuration`_ for details.
    
-4. Click **Save** to save your changes.
+#. Click **Save** to save your changes.
 
 .. _Delete a Group Configuration:
 
