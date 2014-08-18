@@ -1,8 +1,8 @@
 header.global {
-  border-bottom: 1px solid $m-gray;
+  border-bottom: 4px solid $courseware-border-bottom-color;
   box-shadow: 0 1px 5px 0 rgba(0,0,0, 0.1);
   background: $header-bg;
-  height: 76px;
+  height: 75px;
   position: relative;
   width: 100%;
   z-index: 10;
@@ -241,8 +241,6 @@ header.global {
     li {
       display: inline-block;
       margin: 0 $baseline+1 0 0;
-      font-size: em(14);
-      font-weight: 600;
       text-transform: uppercase;
       letter-spacing: 0 !important;
 
@@ -251,14 +249,18 @@ header.global {
       }
 
       a {
+        border-bottom: 4px solid $header-bg;
         display:block;
         padding: ($baseline/4);
-        color: $lighter-base-font-color;
+        font-size: 16px;
+        padding-bottom: 22px;
         font-weight: 600;
+        color: $courseware-navigation-color;
 
         &:hover, &:focus, &:active {
           text-decoration: none;
-          color: $link-color;
+          color: $courseware-hover-color;
+          border-bottom-color: $courseware-border-bottom-color;
         }
       }
 
@@ -278,21 +280,22 @@ header.global {
   }
 
   .nav-courseware {
+    @extend .nav-global;
     float: right;
-    margin-top: ($baseline/4);
-    list-style: none;
 
     li {
-      display: inline-block;
+      a {
+        &.nav-courseware-button {
+          padding: 5px 15px 5px 15px;
+          border: 3px solid $courseware-button-border-color;
+          border-radius: 5px;
+          margin-top: -22px;
 
-      .cta {
-        @extend %m-btn-primary;
+          &:hover, &:focus, &:active {
+            border-bottom-color: $courseware-button-border-color;
+          }
+        }
       }
-    }
-
-    // logged in
-    &.authenticated {
-
     }
   }
 }
