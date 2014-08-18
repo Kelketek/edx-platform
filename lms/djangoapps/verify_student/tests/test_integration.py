@@ -6,8 +6,6 @@ from lxml.html import soupparser
 from django.test.utils import override_settings
 from django.core.urlresolvers import reverse
 
-from opaque_keys.edx.locations import SlashSeparatedCourseKey
-
 from xmodule.modulestore.tests.factories import CourseFactory
 from xmodule.modulestore.tests.django_utils import ModuleStoreTestCase
 from student.tests.factories import UserFactory
