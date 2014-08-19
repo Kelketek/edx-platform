@@ -34,9 +34,6 @@ define(['jquery', 'backbone', 'underscore', 'gettext', 'js/views/baseview',
             this.events = $.extend({}, BaseModal.prototype.events, this.events);
             this.template = this.loadTemplate('course-outline-modal');
             this.options.title = this.getTitle();
-            if (this.options.xblockType) {
-                this.options.modalName = 'bulkpublish-' + this.options.xblockType;
-            }
         },
 
         afterRender: function () {
@@ -110,6 +107,13 @@ define(['jquery', 'backbone', 'underscore', 'gettext', 'js/views/baseview',
     PublishXBlockModal = CourseOutlineXBlockModal.extend({
         events : {
             'click .action-publish': 'save'
+        },
+
+        initialize: function() {
+            CourseOutlineXBlockModal.prototype.initialize.call(this);
+            if (this.options.xblockType) {
+                this.options.modalName = 'bulkpublish-' + this.options.xblockType;
+            }
         },
 
         getTitle: function () {
