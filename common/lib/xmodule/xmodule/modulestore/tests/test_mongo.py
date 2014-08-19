@@ -157,7 +157,7 @@ class TestMongoModuleStore(unittest.TestCase):
     def test_get_courses(self):
         '''Make sure the course objects loaded properly'''
         courses = self.draft_store.get_courses()
-        assert_equals(len(courses), 5)
+        assert_equals(len(courses), 6)
         course_ids = [course.id for course in courses]
         for course_key in [
 
@@ -871,14 +871,16 @@ class TestMongoModuleStore(unittest.TestCase):
             },
         )
 
-
         component = self.draft_store.get_item(interface_location)
         self.assertEqual(unicode(component.link_to_location), unicode(problem_location))
 
         root_dir = path(mkdtemp())
 
         # export_to_xml should work.
-        export_to_xml(self.draft_store, self.content_store, interface_location.course_key, root_dir, 'test_export')
+        try:
+            export_to_xml(self.draft_store, self.content_store, interface_location.course_key, root_dir, 'test_export')
+        finally:
+            shutil.rmtree(root_dir)
 
 
 class TestMongoKeyValueStore(object):
