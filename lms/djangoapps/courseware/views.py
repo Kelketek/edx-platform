@@ -22,6 +22,7 @@ from edxmako.shortcuts import render_to_response, render_to_string
 from django_future.csrf import ensure_csrf_cookie
 from django.views.decorators.cache import cache_control
 from django.db import transaction
+from functools import wraps
 from markupsafe import escape
 
 from courseware import grades
@@ -78,6 +79,26 @@ def user_groups(user):
         cache.set(key, group_names, cache_expiration)
 
     return group_names
+
+
+def verify_course_id(view_func):
+    """
+    If course_id is not valid raise 404.
+    """
+
+    @wraps(view_func)
+    def _decorated(request, *args, **kwargs):
+        course_id = kwargs.get("course_id")
+        if not course_id:
+            course_id = args[0]
+        try:
+            SlashSeparatedCourseKey.from_deprecated_string(course_id)
+        except InvalidKeyError:
+                raise Http404
+        response = view_func(request, *args, **kwargs)
+        return response
+
+    return _decorated
 
 
 @ensure_csrf_cookie
@@ -241,6 +262,7 @@ def chat_settings(course, user):
 @login_required
 @ensure_csrf_cookie
 @cache_control(no_cache=True, no_store=True, must_revalidate=True)
+@verify_course_id
 def index(request, course_id, chapter=None, section=None,
           position=None):
     """
@@ -266,10 +288,7 @@ def index(request, course_id, chapter=None, section=None,
      - HTTPresponse
     """
 
-    try:
-        course_key = SlashSeparatedCourseKey.from_deprecated_string(course_id)
-    except InvalidKeyError:
-        raise Http404
+    course_key = SlashSeparatedCourseKey.from_deprecated_string(course_id)
 
     user = User.objects.prefetch_related("groups").get(id=request.user.id)
     request.user = user  # keep just one instance of User
@@ -462,16 +481,13 @@ def index(request, course_id, chapter=None, section=None,
 
 
 @ensure_csrf_cookie
+@verify_course_id
 def jump_to_id(request, course_id, module_id):
     """
     This entry point allows for a shorter version of a jump to where just the id of the element is
     passed in. This assumes that id is unique within the course_id namespace
     """
-    try:
-        course_key = SlashSeparatedCourseKey.from_deprecated_string(course_id)
-    except InvalidKeyError:
-        raise Http404
-
+    course_key = SlashSeparatedCourseKey.from_deprecated_string(course_id)
     items = modulestore().get_items(course_key, qualifiers={'name': module_id})
 
     if len(items) == 0:
@@ -524,6 +540,7 @@ def jump_to(request, course_id, location):
 
 
 @ensure_csrf_cookie
+@verify_course_id
 def course_info(request, course_id):
     """
     Display the course's info.html, or 404 if there is no such course.
@@ -531,10 +548,7 @@ def course_info(request, course_id):
     Assumes the course_id is in a valid format.
     """
 
-    try:
-        course_key = SlashSeparatedCourseKey.from_deprecated_string(course_id)
-    except InvalidKeyError:
-        raise Http404
+    course_key = SlashSeparatedCourseKey.from_deprecated_string(course_id)
 
     course = get_course_with_access(request.user, 'load', course_key)
     staff_access = has_access(request.user, 'staff', course)
@@ -557,6 +571,7 @@ def course_info(request, course_id):
 
 
 @ensure_csrf_cookie
+@verify_course_id
 def static_tab(request, course_id, tab_slug):
     """
     Display the courses tab with the given name.
@@ -564,10 +579,7 @@ def static_tab(request, course_id, tab_slug):
     Assumes the course_id is in a valid format.
     """
 
-    try:
-        course_key = SlashSeparatedCourseKey.from_deprecated_string(course_id)
-    except InvalidKeyError:
-        raise Http404
+    course_key = SlashSeparatedCourseKey.from_deprecated_string(course_id)
 
     course = get_course_with_access(request.user, 'load', course_key)
 
@@ -593,6 +605,7 @@ def static_tab(request, course_id, tab_slug):
 
 
 @ensure_csrf_cookie
+@verify_course_id
 def syllabus(request, course_id):
     """
     Display the course's syllabus.html, or 404 if there is no such course.
@@ -600,10 +613,7 @@ def syllabus(request, course_id):
     Assumes the course_id is in a valid format.
     """
 
-    try:
-        course_key = SlashSeparatedCourseKey.from_deprecated_string(course_id)
-    except InvalidKeyError:
-        raise Http404
+    course_key = SlashSeparatedCourseKey.from_deprecated_string(course_id)
 
     course = get_course_with_access(request.user, 'load', course_key)
     staff_access = has_access(request.user, 'staff', course)
@@ -641,10 +651,7 @@ def course_about(request, course_id):
     ):
         raise Http404
 
-    try:
-        course_key = SlashSeparatedCourseKey.from_deprecated_string(course_id)
-    except InvalidKeyError:
-        raise Http404
+    course_key = SlashSeparatedCourseKey.from_deprecated_string(course_id)
 
     course = get_course_with_access(request.user, 'see_exists', course_key)
     registered = registered_for_course(course, request.user)
@@ -707,15 +714,13 @@ def course_about(request, course_id):
 
 @ensure_csrf_cookie
 @cache_if_anonymous
+@verify_course_id
 def mktg_course_about(request, course_id):
     """
     This is the button that gets put into an iframe on the Drupal site
     """
 
-    try:
-        course_key = SlashSeparatedCourseKey.from_deprecated_string(course_id)
-    except InvalidKeyError:
-        raise Http404
+    course_key = SlashSeparatedCourseKey.from_deprecated_string(course_id)
 
     try:
         course = get_course_with_access(request.user, 'see_exists', course_key)
@@ -752,16 +757,14 @@ def mktg_course_about(request, course_id):
 @login_required
 @cache_control(no_cache=True, no_store=True, must_revalidate=True)
 @transaction.commit_manually
+@verify_course_id
 def progress(request, course_id, student_id=None):
     """
     Wraps "_progress" with the manual_transaction context manager just in case
     there are unanticipated errors.
     """
 
-    try:
-        course_key = SlashSeparatedCourseKey.from_deprecated_string(course_id)
-    except InvalidKeyError:
-        raise Http404
+    course_key = SlashSeparatedCourseKey.from_deprecated_string(course_id)
 
     with grades.manual_transaction():
         return _progress(request, course_key, student_id)
@@ -835,16 +838,15 @@ def fetch_reverify_banner_info(request, course_key):
 
 
 @login_required
+@verify_course_id
 def submission_history(request, course_id, student_username, location):
     """Render an HTML fragment (meant for inclusion elsewhere) that renders a
     history of all state changes made by this user for this problem location.
     Right now this only works for problems because that's all
     StudentModuleHistory records.
     """
-    try:
-        course_key = SlashSeparatedCourseKey.from_deprecated_string(course_id)
-    except (InvalidKeyError, AssertionError):
-        return HttpResponse(escape(_(u'Invalid course id.')))
+
+    course_key = SlashSeparatedCourseKey.from_deprecated_string(course_id)
 
     try:
         usage_key = course_key.make_usage_key_from_deprecated_string(location)
@@ -944,6 +946,7 @@ def get_static_tab_contents(request, course, tab):
 
 
 @require_GET
+@verify_course_id
 def get_course_lti_endpoints(request, course_id):
     """
     View that, given a course_id, returns the a JSON object that enumerates all of the LTI endpoints for that course.
@@ -960,10 +963,8 @@ def get_course_lti_endpoints(request, course_id):
     Returns:
         (django response object):  HTTP response.  404 if course is not found, otherwise 200 with JSON body.
     """
-    try:
-        course_key = SlashSeparatedCourseKey.from_deprecated_string(course_id)
-    except InvalidKeyError:
-        return HttpResponse(status=404)
+
+    course_key = SlashSeparatedCourseKey.from_deprecated_string(course_id)
 
     try:
         course = get_course(course_key, depth=2)
