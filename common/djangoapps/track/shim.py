@@ -48,3 +48,6 @@ def remove_shim_context(event):
         for field in CONTEXT_FIELDS_TO_INCLUDE:
             if field in context:
                 del context[field]
+
+        if 'client_id' in context:
+            del context['client_id']
